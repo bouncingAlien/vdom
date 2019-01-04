@@ -143,10 +143,13 @@ function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = 
 
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
-var render = function render(vNode) {
-  var $el = document.createElement(vNode.tagName); // set attributes
+var renderElement = function renderElement(_ref) {
+  var tagName = _ref.tagName,
+      attr = _ref.attr,
+      children = _ref.children;
+  var $el = document.createElement(tagName); // set attributes
 
-  var _arr = Object.entries(vNode.attr);
+  var _arr = Object.entries(attr);
 
   for (var _i = 0; _i < _arr.length; _i++) {
     var _arr$_i = _slicedToArray(_arr[_i], 2),
@@ -162,7 +165,7 @@ var render = function render(vNode) {
   var _iteratorError = undefined;
 
   try {
-    for (var _iterator = vNode.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+    for (var _iterator = children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
       var child = _step.value;
       var $child = render(child);
       $el.appendChild($child);
@@ -185,7 +188,38 @@ var render = function render(vNode) {
   return $el;
 };
 
+var render = function render(vNode) {
+  if (typeof vNode === 'string') return document.createTextNode(vNode);
+  return renderElement(vNode);
+};
+
 var _default = render;
+exports.default = _default;
+},{}],"vdom/mount.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default($node, $target) {
+  $target.replaceWith($node);
+  return $node;
+};
+
+exports.default = _default;
+},{}],"vdom/diff.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var diff = function diff() {};
+
+var _default = diff;
 exports.default = _default;
 },{}],"main.js":[function(require,module,exports) {
 "use strict";
@@ -194,21 +228,39 @@ var _createElement = _interopRequireDefault(require("./vdom/createElement"));
 
 var _render = _interopRequireDefault(require("./vdom/render"));
 
+var _mount = _interopRequireDefault(require("./vdom/mount"));
+
+var _diff = _interopRequireDefault(require("./vdom/diff"));
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var vApp = (0, _createElement.default)('div', {
-  attr: {
-    id: 'app'
-  },
-  children: [(0, _createElement.default)('img', {
+var createVApp = function createVApp(count) {
+  return (0, _createElement.default)('div', {
     attr: {
-      src: 'https://media.giphy.com/media/3NtY188QaxDdC/giphy.gif'
-    }
-  })]
-});
+      id: 'app',
+      dataCount: count
+    },
+    children: [String(count), (0, _createElement.default)('img', {
+      attr: {
+        src: 'https://media.giphy.com/media/3NtY188QaxDdC/giphy.gif'
+      }
+    }), (0, _createElement.default)('input')]
+  });
+};
+
+var count = 0;
+var vApp = createVApp(count);
 var $app = (0, _render.default)(vApp);
+var $rootElement = (0, _mount.default)($app, document.getElementById('root'));
+setInterval(function () {
+  count++;
+  var vNewApp = createVApp(count);
+  var patch = (0, _diff.default)(vapp, vNewApp);
+  patch($rootElement);
+  vApp = vNewApp;
+}, 1000);
 console.log($app);
-},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js","./vdom/mount":"vdom/mount.js","./vdom/diff":"vdom/diff.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -235,7 +287,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "34069" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "43151" + '/');
 
   ws.onmessage = function (event) {
     var data = JSON.parse(event.data);

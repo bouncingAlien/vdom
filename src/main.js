@@ -29,7 +29,7 @@ setInterval(() => {
     count++;
     const vNewApp = createVApp(count);
     const patch = diff(vapp, vNewApp);
-    patch($rootElement);
+    $rootElement = patch($rootElement);
     vApp = vNewApp;
 }, 1000);
 

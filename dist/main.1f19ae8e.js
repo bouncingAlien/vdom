@@ -217,11 +217,35 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.default = void 0;
 
-var diff = function diff() {};
+var _render = _interopRequireDefault(require("./render"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var diff = function diff(vOldNode, vNewNode) {
+  if (vNewNode === undefined) {
+    return function ($node) {
+      $node.remove();
+      return undefined;
+    };
+  }
+
+  ;
+
+  if (vOldNode.tagName !== vNewNode.tagName) {
+    return function ($node) {
+      var $newNode = (0, _render.default)(vNewNode);
+      $node.replaceWith($newNode);
+      return $newNode;
+    };
+  }
+
+  ;
+  return function ($node) {};
+};
 
 var _default = diff;
 exports.default = _default;
-},{}],"main.js":[function(require,module,exports) {
+},{"./render":"vdom/render.js"}],"main.js":[function(require,module,exports) {
 "use strict";
 
 var _createElement = _interopRequireDefault(require("./vdom/createElement"));
@@ -256,7 +280,7 @@ setInterval(function () {
   count++;
   var vNewApp = createVApp(count);
   var patch = (0, _diff.default)(vapp, vNewApp);
-  patch($rootElement);
+  $rootElement = patch($rootElement);
   vApp = vNewApp;
 }, 1000);
 console.log($app);

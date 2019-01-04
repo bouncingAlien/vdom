@@ -104,9 +104,111 @@ parcelRequire = (function (modules, cache, entry, globalName) {
 
   // Override the current require with this new one
   return newRequire;
-})({"main.js":[function(require,module,exports) {
-console.log('hello world');
-},{}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+})({"vdom/createElement.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var _default = function _default(tagName) {
+  var _ref = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {},
+      _ref$attr = _ref.attr,
+      attr = _ref$attr === void 0 ? {} : _ref$attr,
+      _ref$children = _ref.children,
+      children = _ref$children === void 0 ? [] : _ref$children;
+
+  return {
+    tagName: tagName,
+    attr: attr,
+    children: children
+  };
+};
+
+exports.default = _default;
+},{}],"vdom/render.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest(); }
+
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance"); }
+
+function _iterableToArrayLimit(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
+
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+var render = function render(vNode) {
+  var $el = document.createElement(vNode.tagName); // set attributes
+
+  var _arr = Object.entries(vNode.attr);
+
+  for (var _i = 0; _i < _arr.length; _i++) {
+    var _arr$_i = _slicedToArray(_arr[_i], 2),
+        key = _arr$_i[0],
+        value = _arr$_i[1];
+
+    $el.setAttribute(key, value);
+  } // set children
+
+
+  var _iteratorNormalCompletion = true;
+  var _didIteratorError = false;
+  var _iteratorError = undefined;
+
+  try {
+    for (var _iterator = vNode.children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+      var child = _step.value;
+      var $child = render(child);
+      $el.appendChild($child);
+    }
+  } catch (err) {
+    _didIteratorError = true;
+    _iteratorError = err;
+  } finally {
+    try {
+      if (!_iteratorNormalCompletion && _iterator.return != null) {
+        _iterator.return();
+      }
+    } finally {
+      if (_didIteratorError) {
+        throw _iteratorError;
+      }
+    }
+  }
+
+  return $el;
+};
+
+var _default = render;
+exports.default = _default;
+},{}],"main.js":[function(require,module,exports) {
+"use strict";
+
+var _createElement = _interopRequireDefault(require("./vdom/createElement"));
+
+var _render = _interopRequireDefault(require("./vdom/render"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var vApp = (0, _createElement.default)('div', {
+  attr: {
+    id: 'app'
+  },
+  children: [(0, _createElement.default)('img', {
+    attr: {
+      src: 'https://media.giphy.com/media/3NtY188QaxDdC/giphy.gif'
+    }
+  })]
+});
+var $app = (0, _render.default)(vApp);
+console.log($app);
+},{"./vdom/createElement":"vdom/createElement.js","./vdom/render":"vdom/render.js"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;

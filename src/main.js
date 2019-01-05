@@ -28,7 +28,7 @@ let $rootElement = mount($app, document.getElementById('root'));
 setInterval(() => {
     count++;
     const vNewApp = createVApp(count);
-    const patch = diff(vapp, vNewApp);
+    const patch = diff(vApp, vNewApp);
     $rootElement = patch($rootElement);
     vApp = vNewApp;
 }, 1000);
